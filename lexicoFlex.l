@@ -19,13 +19,13 @@ NUEVALINEA [ \n]
 
 %%
 
-"("              { printf("Token tipo: PARENTESISIZQUIERDO \n "); return PARENTESISIZQUIERDO; }
-")"              { printf("Token tipo: PARENTESISDERECHO \n ");return PARENTESISDERECHO; }
+"("              { printf("Token tipo: PARENTESISIZQUIERDO \n"); return PARENTESISIZQUIERDO; }
+")"              { printf("Token tipo: PARENTESISDERECHO \n");return PARENTESISDERECHO; }
 "inicio"         { return INICIO; }
 "fin"            { return FIN; }
-"Es"             { printf("Token tipo: ASIGNACION %s \n ", yytext); yylval.reservada = strdup(yytext); return ASIGNACION; }
-"Int"            { printf("Token tipo: ENTERO %s \n ", yytext); return ENTERO; }
-"CalcularFecha"  { printf("Token tipo: CALCULARFECHA \n "); yylval.reservada = strdup(yytext); return CALCULARFECHA; }
+"Es"             { printf("Token tipo: ASIGNACION %s \n", yytext); yylval.reservada = strdup(yytext); return ASIGNACION; }
+"Int"            { printf("Token tipo: ENTERO %s \n", yytext); return ENTERO; }
+"CalcularFecha"  { printf("Token tipo: CALCULARFECHA \n"); yylval.reservada = strdup(yytext); return CALCULARFECHA; }
 "CalcularEdad"   { yylval.reservada = strdup(yytext); return CALCULAREDAD; }
 "MostrarEdad"    { yylval.reservada = strdup(yytext); return MOSTRAREDAD; }
 "."              { printf("Token tipo: PUNTO"); return PUNTO; }
@@ -36,8 +36,8 @@ NUEVALINEA [ \n]
 
 {BLANCO}+        ; // para reconocer los espacios en blanco
 {NUEVALINEA}+    ; // para reconocer los saltos de línea
-{IDENTIFICADOR}  { printf("Token tipo: IDENTIFICADOR %s \n ", yytext); yylval.reservada = strdup(yytext); return ID; }
-{NUMERO}         { printf("Token tipo: ENTERO %s \n ", yytext); yylval.number = atoi(yytext); return NUMERO; }
+{IDENTIFICADOR}  { printf("Token tipo: IDENTIFICADOR %s \n", yytext); yylval.reservada = strdup(yytext); return ID; }
+{NUMERO}         { printf("Token tipo: ENTERO %s \n", yytext); yylval.number = atoi(yytext); return NUMERO; }
 
 .                { errorLexico(yytext); return OTHER; }
 

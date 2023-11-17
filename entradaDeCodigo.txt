@@ -8,5 +8,5 @@ Int dian Es 10.
 Int fechaa Es CalcularFecha(anioa mesa diaa).
 Int fechan Es CalcularFecha(anion mesn dian).
 Int edad Es CalcularEdad(fechaa fechan).
-MostrarEdad(edad.).
+MostrarEdad(edad).
 fin

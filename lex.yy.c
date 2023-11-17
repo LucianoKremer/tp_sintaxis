@@ -690,12 +690,12 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 YY_RULE_SETUP
 #line 22 "lexicoFlex.l"
-{ printf("Token tipo: PARENTESISIZQUIERDO \n "); return PARENTESISIZQUIERDO; }
+{ printf("Token tipo: PARENTESISIZQUIERDO \n"); return PARENTESISIZQUIERDO; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
 #line 23 "lexicoFlex.l"
-{ printf("Token tipo: PARENTESISDERECHO \n ");return PARENTESISDERECHO; }
+{ printf("Token tipo: PARENTESISDERECHO \n");return PARENTESISDERECHO; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
@@ -710,17 +710,17 @@ YY_RULE_SETUP
 case 5:
 YY_RULE_SETUP
 #line 26 "lexicoFlex.l"
-{ printf("Token tipo: ASIGNACION %s \n ", yytext); yylval.reservada = strdup(yytext); return ASIGNACION; }
+{ printf("Token tipo: ASIGNACION %s \n", yytext); yylval.reservada = strdup(yytext); return ASIGNACION; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
 #line 27 "lexicoFlex.l"
-{ printf("Token tipo: ENTERO %s \n ", yytext); return ENTERO; }
+{ printf("Token tipo: ENTERO %s \n", yytext); return ENTERO; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
 #line 28 "lexicoFlex.l"
-{ printf("Token tipo: CALCULARFECHA \n "); yylval.reservada = strdup(yytext); return CALCULARFECHA; }
+{ printf("Token tipo: CALCULARFECHA \n"); yylval.reservada = strdup(yytext); return CALCULARFECHA; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
@@ -765,12 +765,12 @@ YY_RULE_SETUP
 case 16:
 YY_RULE_SETUP
 #line 39 "lexicoFlex.l"
-{ printf("Token tipo: IDENTIFICADOR %s \n ", yytext); yylval.reservada = strdup(yytext); return ID; }
+{ printf("Token tipo: IDENTIFICADOR %s \n", yytext); yylval.reservada = strdup(yytext); return ID; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
 #line 40 "lexicoFlex.l"
-{ printf("Token tipo: ENTERO %s \n ", yytext); yylval.number = atoi(yytext); return NUMERO; }
+{ printf("Token tipo: ENTERO %s \n", yytext); yylval.number = atoi(yytext); return NUMERO; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
