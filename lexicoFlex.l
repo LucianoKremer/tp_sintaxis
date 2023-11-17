@@ -13,13 +13,13 @@ DIGITO ["0-9"]
 LETRA ["a-z"]
 GUION ["_"]
 IDENTIFICADOR {LETRA}+({GUION}{LETRA}+)*
-NUMERO {DIGITO}({DIGITO})*
+NUMERO {DIGITO}+
 BLANCO [ "\t"]
-NUEVALINEA [ "\n"]
+NUEVALINEA [ \n]
 
 %%
 
-"calcularFecha"  { yylval.reservada = strdup(yytext); return CALCULARFECHA; }
+"calcularFecha"  { printf("Token tipo: CALCULARFECHA \n "); yylval.reservada = strdup(yytext); return CALCULARFECHA; }
 "calcularEdad"   { yylval.reservada = strdup(yytext); return CALCULAREDAD; }
 "mostrarEdad"    { yylval.reservada = strdup(yytext); return MOSTRAREDAD; }
 
@@ -31,12 +31,12 @@ NUEVALINEA [ "\n"]
 {BLANCO}+        ; // para reconocer los espacios en blanco
 {NUEVALINEA}+    ; // para reconocer los saltos de línea
 {IDENTIFICADOR}  { printf("Token tipo: IDENTIFICADOR %s \n ", yytext); yylval.reservada = strdup(yytext); return ID; }
-{NUMERO}         { yylval.number = atoi(yytext); return NUMERO; }
+{NUMERO}         { printf("Token tipo: ENTERO %s \n ", yytext); yylval.number = atoi(yytext); return NUMERO; }
 
-"."              { return PUNTO; }
+"."              { printf("Token tipo: PUNTO"); return PUNTO; }
 ","              { return COMA; }
-"("              { return PARENTESISIZQUIERDO; }
-")"              { return PARENTESISDERECHO; }
+"("              { printf("Token tipo: PARENTESISIZQUIERDO \n "); return PARENTESISIZQUIERDO; }
+")"              { printf("Token tipo: PARENTESISDERECHO \n ");return PARENTESISDERECHO; }
 "+"              { return SUMA; }
 "-"              { return RESTA; }
 
@@ -56,75 +56,3 @@ int yywrap(){
 }
 
 
-/*
-%option yylineno
-
-DIGITO ([0-9])
-LETRA ([a-z])
-GUION ("_")
-/* {LETRA})({LETRA|GUION} 
-IDENTIFICADOR {LETRA}(LETRA|GUION)*
-NUMERO {DIGITO}({DIGITO})*
-
-%%
-
-"calcularFecha" 	{yylval.reservada = yytext; return CALCULARFECHA;}
-"calcularEdad" 		{yylval.reservada = yytext; return CALCULAREDAD;}
-"mostrarEdad" 		{yylval.reservada = yytext; return MOSTRAREDAD;}
-
-"int" 				 return ENTERO;
-
-"inicio" 			 return INICIO;
-"fin" 				 return FIN;
-
-"es" 				{yylval.reservada = yytext; return ASIGNACION;}
-
-{IDENTIFICADOR}     {yylval.reservada = yytext; return ID;}
-{NUMERO}      		{yylval.number = atoi(yytext); return NUMERO;}
-
-"." 				{return PUNTO;}
-"," 				{return COMA;}
-"(" 				{return PARENTESISIZQUIERDO;}
-")" 				{return PARENTESISDERECHO;}
-"+" 				{return SUMA;}
-"-" 				{return RESTA;}
-[ \t\n]+			; // para reconocer los saltos de linea
-
-.   {errorLexico(); return(OTHER);}
-
-%%
- 
-
-void errorLexico(char* other){
-	printf("	<<ErrorLexico: caracter %s, en la linea %d>>", yytext, yylineno);
-	exit(0); 
-}
-
-
-
-int yywrap(){
-    return 1;
-}
-/*
-int main(int num_args, char** args) {
-  if(num_args != 2) {
-	cout << "Para analizar un archivo, ejecute: ./Micro <nombre del archivo>";
-	cout << endl;
-	cout << "Entrada estandar. (Para terminar presione CTRL + C)" << endl;
-	yyparse();
-  }
-  else{
-  		FILE* archivo = fopen(args[1],"r");
-  		if(archivo == NULL) {
-			cout << "Error al abrir el archivo " << args[1] << endl;
-			cout << "Entrada estandar. (Para terminar presione CTRL + C)" << endl;
-			yyparse();
-	  	}
-  		else{
-	  		yyin = archivo;
-	  		yyparse();
-	  		fclose(archivo);
-	  	    }
-  	}
-}
-*/
