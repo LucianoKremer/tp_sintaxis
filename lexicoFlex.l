@@ -12,35 +12,32 @@ void errorLexico();
 DIGITO ["0-9"]
 LETRA ["a-z"]
 GUION ["_"]
-IDENTIFICADOR {LETRA}+({GUION}{LETRA}+)*
+IDENTIFICADOR {LETRA}+({GUION}{LETRA}+)?
 NUMERO {DIGITO}+
-BLANCO [ "\t"]
+BLANCO [ \t]
 NUEVALINEA [ \n]
 
 %%
 
-"calcularFecha"  { printf("Token tipo: CALCULARFECHA \n "); yylval.reservada = strdup(yytext); return CALCULARFECHA; }
-"calcularEdad"   { yylval.reservada = strdup(yytext); return CALCULAREDAD; }
-"mostrarEdad"    { yylval.reservada = strdup(yytext); return MOSTRAREDAD; }
-
-"int"            { printf("Token tipo: ENTERO %s \n ", yytext); return ENTERO; }
+"("              { printf("Token tipo: PARENTESISIZQUIERDO \n "); return PARENTESISIZQUIERDO; }
+")"              { printf("Token tipo: PARENTESISDERECHO \n ");return PARENTESISDERECHO; }
 "inicio"         { return INICIO; }
 "fin"            { return FIN; }
-"es"             { printf("Token tipo: ASIGNACION %s \n ", yytext); yylval.reservada = strdup(yytext); return ASIGNACION; }
+"Es"             { printf("Token tipo: ASIGNACION %s \n ", yytext); yylval.reservada = strdup(yytext); return ASIGNACION; }
+"Int"            { printf("Token tipo: ENTERO %s \n ", yytext); return ENTERO; }
+"CalcularFecha"  { printf("Token tipo: CALCULARFECHA \n "); yylval.reservada = strdup(yytext); return CALCULARFECHA; }
+"CalcularEdad"   { yylval.reservada = strdup(yytext); return CALCULAREDAD; }
+"MostrarEdad"    { yylval.reservada = strdup(yytext); return MOSTRAREDAD; }
+"."              { printf("Token tipo: PUNTO"); return PUNTO; }
+","              { return COMA; }
+
+"+"              { return SUMA; }
+"-"              { return RESTA; }
 
 {BLANCO}+        ; // para reconocer los espacios en blanco
 {NUEVALINEA}+    ; // para reconocer los saltos de línea
 {IDENTIFICADOR}  { printf("Token tipo: IDENTIFICADOR %s \n ", yytext); yylval.reservada = strdup(yytext); return ID; }
 {NUMERO}         { printf("Token tipo: ENTERO %s \n ", yytext); yylval.number = atoi(yytext); return NUMERO; }
-
-"."              { printf("Token tipo: PUNTO"); return PUNTO; }
-","              { return COMA; }
-"("              { printf("Token tipo: PARENTESISIZQUIERDO \n "); return PARENTESISIZQUIERDO; }
-")"              { printf("Token tipo: PARENTESISDERECHO \n ");return PARENTESISDERECHO; }
-"+"              { return SUMA; }
-"-"              { return RESTA; }
-
-
 
 .                { errorLexico(yytext); return OTHER; }
 

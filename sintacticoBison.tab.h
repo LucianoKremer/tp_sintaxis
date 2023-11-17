@@ -65,7 +65,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 43 "sintacticoBison.y"
+#line 42 "sintacticoBison.y"
 
    char cadena[30];
    int number;

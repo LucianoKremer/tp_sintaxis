@@ -64,11 +64,11 @@ sentencias : sentencias sentencia { printf("Regla:sentencias sentencia\n")}
 sentencia: ENTERO ID PUNTO {printf("Regla: ENTERO ID PUNTO\n"); asignarValorA($2, 0);};
         | ENTERO ID ASIGNACION NUMERO PUNTO {printf("Regla: ENTERO ID ASIGNACION NUMERO PUNTO\n"); asignarValorA($2, $4); }; 
         | ID ASIGNACION expresion PUNTO { cambiarValorA($1, $3); };
-        | ENTERO ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO NUMERO COMA NUMERO COMA NUMERO PARENTESISDERECHO PUNTO { asignarValorA($2, calcularFecha($6, $8, $10)); }; // SI ME DAN 3 NUMEROS
-        | ENTERO ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO NUMERO COMA NUMERO PARENTESISDERECHO PUNTO { asignarValorA($2, calcularEdad($6, $8)); }; // SI ME DAN 2 NUMEROS
-        | ENTERO ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO ID COMA ID COMA ID PARENTESISDERECHO PUNTO { asignarValorA($2, calcularFecha(buscar(lista, $6)->info.valor, buscar(lista, $8)->info.valor, buscar(lista, $10)->info.valor)); }; // SI ME DAN 3 IDENTIFICADORES
-        | ENTERO ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO ID COMA ID PARENTESISDERECHO PUNTO { asignarValorA($2, calcularEdad(buscar(lista, $6)->info.valor, buscar(lista, $8)->info.valor)); }; // SI ME DAN 2 IDENTIFICADORES
-        | MOSTRAREDAD PARENTESISIZQUIERDO ID PARENTESISDERECHO PUNTO { mostrarEdad(buscar(lista, $3)->info.valor) };
+        | ENTERO ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO NUMERO NUMERO NUMERO PUNTO PARENTESISDERECHO PUNTO { asignarValorA($2, calcularFecha($6, $7, $8)); }; // SI ME DAN 3 NUMEROS
+        | ENTERO ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO NUMERO NUMERO PUNTO PARENTESISDERECHO PUNTO { asignarValorA($2, calcularEdad($6, $7)); }; // SI ME DAN 2 NUMEROS
+        | ENTERO ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO ID ID ID PUNTO PARENTESISDERECHO PUNTO { asignarValorA($2, calcularFecha(buscar(lista, $6)->info.valor, buscar(lista, $7)->info.valor, buscar(lista, $8)->info.valor)); }; // SI ME DAN 3 IDENTIFICADORES
+        | ENTERO ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO ID ID PUNTO PARENTESISDERECHO PUNTO { asignarValorA($2, calcularEdad(buscar(lista, $6)->info.valor, buscar(lista, $7)->info.valor)); }; // SI ME DAN 2 IDENTIFICADORES
+        | MOSTRAREDAD PARENTESISIZQUIERDO ID PUNTO PARENTESISDERECHO PUNTO { mostrarEdad(buscar(lista, $3)->info.valor) };
 ;
 
 

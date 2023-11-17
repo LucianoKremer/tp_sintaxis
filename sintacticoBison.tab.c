@@ -68,7 +68,7 @@
 /* Copy the first part of user declarations.  */
 
 /* Line 189 of yacc.c  */
-#line 2 "sintacticoBison.y"
+#line 1 "sintacticoBison.y"
 
 
 #include <stdio.h>
@@ -160,7 +160,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 43 "sintacticoBison.y"
+#line 42 "sintacticoBison.y"
 
    char cadena[30];
    int number;
@@ -396,7 +396,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   62
+#define YYLAST   58
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  19
@@ -405,7 +405,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  20
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  63
+#define YYNSTATES  61
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -453,8 +453,8 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint8 yyprhs[] =
 {
        0,     0,     3,     4,     5,    11,    14,    16,    20,    26,
-      31,    43,    53,    65,    75,    81,    83,    87,    91,    93,
-      95
+      31,    43,    54,    65,    76,    83,    85,    89,    93,    95,
+      97
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
@@ -463,21 +463,22 @@ static const yytype_int8 yyrhs[] =
       20,     0,    -1,    -1,    -1,    16,    21,    23,    22,    17,
       -1,    23,    24,    -1,    24,    -1,    18,    11,     4,    -1,
       18,    11,     3,    12,     4,    -1,    11,     3,    25,     4,
-      -1,    11,     3,    13,     7,    12,     9,    12,     9,    12,
-       8,     4,    -1,    11,     3,    14,     7,    12,     9,    12,
-       8,     4,    -1,    11,     3,    13,     7,    11,     9,    11,
-       9,    11,     8,     4,    -1,    11,     3,    14,     7,    11,
-       9,    11,     8,     4,    -1,    15,     7,    11,     8,     4,
-      -1,    26,    -1,    25,     5,    26,    -1,    25,     6,    26,
-      -1,    11,    -1,    12,    -1,     7,    25,     8,    -1
+      -1,    18,    11,     3,    13,     7,    12,    12,    12,     4,
+       8,     4,    -1,    18,    11,     3,    14,     7,    12,    12,
+       4,     8,     4,    -1,    18,    11,     3,    13,     7,    11,
+      11,    11,     8,     4,    -1,    18,    11,     3,    14,     7,
+      11,    11,     4,     8,     4,    -1,    15,     7,    11,     4,
+       8,     4,    -1,    26,    -1,    25,     5,    26,    -1,    25,
+       6,    26,    -1,    11,    -1,    12,    -1,     7,    25,     8,
+      -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    58,    58,    58,    58,    61,    62,    65,    66,    67,
-      68,    69,    70,    71,    72,    76,    77,    78,    81,    82,
-      83
+       0,    57,    57,    57,    57,    60,    61,    64,    65,    66,
+      67,    68,    69,    70,    71,    75,    76,    77,    80,    81,
+      82
 };
 #endif
 
@@ -516,7 +517,7 @@ static const yytype_uint8 yyr1[] =
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     0,     0,     5,     2,     1,     3,     5,     4,
-      11,     9,    11,     9,     5,     1,     3,     3,     1,     1,
+      11,    10,    10,    10,     6,     1,     3,     3,     1,     1,
        3
 };
 
@@ -526,38 +527,38 @@ static const yytype_uint8 yyr2[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     2,     0,     0,     1,     0,     0,     0,     3,     6,
-       0,     0,     0,     0,     5,     0,    18,    19,     0,     0,
-       0,    15,     0,     0,     7,     4,     0,     0,     0,     9,
-       0,     0,     0,     0,    20,     0,     0,     0,     0,    16,
-      17,    14,     8,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,    13,    11,     0,
-       0,    12,    10
+       0,     0,     0,     0,     5,     0,    18,    19,     0,    15,
+       0,     0,     7,     4,     0,     9,     0,     0,     0,     0,
+       0,     0,    20,    16,    17,     0,     8,     0,     0,    14,
+       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,     0,     0,    12,     0,    13,    11,
+      10
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,    13,     8,     9,    20,    21
+      -1,     2,     3,    13,     8,     9,    18,    19
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -14
+#define YYPACT_NINF -12
 static const yytype_int8 yypact[] =
 {
-     -13,   -14,    18,    -3,   -14,    24,    21,    19,    -3,   -14,
-      -7,    20,    -2,    15,   -14,     2,   -14,   -14,    22,    26,
-      16,   -14,    27,    25,   -14,   -14,    11,    -1,    12,   -14,
-       2,     2,    30,    32,   -14,    29,    31,    33,    34,   -14,
-     -14,   -14,   -14,    28,    35,    37,    38,    36,    40,    43,
-      44,    42,    45,    50,    51,    48,    52,   -14,   -14,    54,
-      55,   -14,   -14
+      10,   -12,    15,   -11,   -12,     7,    12,    16,   -11,   -12,
+      -6,    17,    -1,    13,   -12,    -6,   -12,   -12,     8,   -12,
+      25,     4,   -12,   -12,     3,   -12,    -6,    -6,    23,    28,
+      26,    27,   -12,   -12,   -12,    31,   -12,     9,    11,   -12,
+      29,    24,    30,    32,    34,    35,    33,    38,    40,    39,
+      41,    42,    47,    44,    49,    50,   -12,    51,   -12,   -12,
+     -12
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -14,   -14,   -14,   -14,   -14,    53,    47,    -5
+     -12,   -12,   -12,   -12,   -12,    48,    43,    -2
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -567,24 +568,22 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-      15,    23,    24,     1,    16,    17,    18,    19,     5,    15,
-      35,    36,     6,    16,    17,     7,    30,    31,     4,    34,
-      29,    30,    31,    37,    38,    39,    40,    10,    11,    27,
-      12,    22,    25,    28,    41,    32,    42,    33,    43,    47,
-      44,     0,    45,    46,     0,    51,     0,    48,    49,    52,
-      50,    53,    54,    55,    57,    58,    59,    56,    61,    62,
-      60,    14,    26
+       5,    15,    21,    22,     6,    16,    17,     7,    26,    27,
+      10,    32,    25,    26,    27,     4,    29,    30,    31,    11,
+      40,    41,    42,    43,    33,    34,     1,    12,    20,    28,
+      23,    35,    36,    37,    38,    39,    45,    50,     0,     0,
+      44,    46,    51,    53,    47,    48,     0,    49,    52,    54,
+      55,    56,    57,    58,    59,    60,    14,     0,    24
 };
 
 static const yytype_int8 yycheck[] =
 {
-       7,     3,     4,    16,    11,    12,    13,    14,    11,     7,
-      11,    12,    15,    11,    12,    18,     5,     6,     0,     8,
-       4,     5,     6,    11,    12,    30,    31,     3,     7,     7,
-      11,    11,    17,     7,     4,     8,     4,    12,     9,    11,
-       9,    -1,     9,     9,    -1,     9,    -1,    12,    11,     9,
-      12,     8,     8,    11,     4,     4,     8,    12,     4,     4,
-       8,     8,    15
+      11,     7,     3,     4,    15,    11,    12,    18,     5,     6,
+       3,     8,     4,     5,     6,     0,    12,    13,    14,     7,
+      11,    12,    11,    12,    26,    27,    16,    11,    11,     4,
+      17,     8,     4,     7,     7,     4,    12,     4,    -1,    -1,
+      11,    11,     4,     4,    12,    11,    -1,    12,     8,     8,
+       8,     4,     8,     4,     4,     4,     8,    -1,    15
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -592,12 +591,12 @@ static const yytype_int8 yycheck[] =
 static const yytype_uint8 yystos[] =
 {
        0,    16,    20,    21,     0,    11,    15,    18,    23,    24,
-       3,     7,    11,    22,    24,     7,    11,    12,    13,    14,
-      25,    26,    11,     3,     4,    17,    25,     7,     7,     4,
-       5,     6,     8,    12,     8,    11,    12,    11,    12,    26,
-      26,     4,     4,     9,     9,     9,     9,    11,    12,    11,
-      12,     9,     9,     8,     8,    11,    12,     4,     4,     8,
-       8,     4,     4
+       3,     7,    11,    22,    24,     7,    11,    12,    25,    26,
+      11,     3,     4,    17,    25,     4,     5,     6,     4,    12,
+      13,    14,     8,    26,    26,     8,     4,     7,     7,     4,
+      11,    12,    11,    12,    11,    12,    11,    12,    11,    12,
+       4,     4,     8,     4,     8,     8,     4,     8,     4,     4,
+       4
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1411,140 +1410,140 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 58 "sintacticoBison.y"
+#line 57 "sintacticoBison.y"
     { printf("Regla: INICIO\n");}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 58 "sintacticoBison.y"
+#line 57 "sintacticoBison.y"
     { printf("Regla: sentencias\n");}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 58 "sintacticoBison.y"
+#line 57 "sintacticoBison.y"
     { printf("Regla: FIN\n");}
     break;
 
   case 5:
 
 /* Line 1455 of yacc.c  */
-#line 61 "sintacticoBison.y"
+#line 60 "sintacticoBison.y"
     { printf("Regla:sentencias sentencia\n");}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 62 "sintacticoBison.y"
+#line 61 "sintacticoBison.y"
     {printf("Entro a sentencia\n");}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 65 "sintacticoBison.y"
+#line 64 "sintacticoBison.y"
     {printf("Regla: ENTERO ID PUNTO\n"); asignarValorA((yyvsp[(2) - (3)].cadena), 0);;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 66 "sintacticoBison.y"
-    { asignarValorA((yyvsp[(2) - (5)].cadena), (yyvsp[(4) - (5)].number)); ;}
+#line 65 "sintacticoBison.y"
+    {printf("Regla: ENTERO ID ASIGNACION NUMERO PUNTO\n"); asignarValorA((yyvsp[(2) - (5)].cadena), (yyvsp[(4) - (5)].number)); ;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 67 "sintacticoBison.y"
+#line 66 "sintacticoBison.y"
     { cambiarValorA((yyvsp[(1) - (4)].cadena), (yyvsp[(3) - (4)].number)); ;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 68 "sintacticoBison.y"
-    { asignarValorA((yyvsp[(1) - (11)].cadena), calcularFecha((yyvsp[(5) - (11)].number), (yyvsp[(7) - (11)].number), (yyvsp[(9) - (11)].number))); ;}
+#line 67 "sintacticoBison.y"
+    { asignarValorA((yyvsp[(2) - (11)].cadena), calcularFecha((yyvsp[(6) - (11)].number), (yyvsp[(7) - (11)].number), (yyvsp[(8) - (11)].number))); ;}
     break;
 
   case 11:
 
 /* Line 1455 of yacc.c  */
-#line 69 "sintacticoBison.y"
-    { asignarValorA((yyvsp[(1) - (9)].cadena), calcularEdad((yyvsp[(5) - (9)].number), (yyvsp[(7) - (9)].number))); ;}
+#line 68 "sintacticoBison.y"
+    { asignarValorA((yyvsp[(2) - (10)].cadena), calcularEdad((yyvsp[(6) - (10)].number), (yyvsp[(7) - (10)].number))); ;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 70 "sintacticoBison.y"
-    { asignarValorA((yyvsp[(1) - (11)].cadena), calcularFecha(buscar(lista, (yyvsp[(5) - (11)].cadena))->info.valor, buscar(lista, (yyvsp[(7) - (11)].cadena))->info.valor, buscar(lista, (yyvsp[(9) - (11)].cadena))->info.valor)); ;}
+#line 69 "sintacticoBison.y"
+    { asignarValorA((yyvsp[(2) - (10)].cadena), calcularFecha(buscar(lista, (yyvsp[(6) - (10)].cadena))->info.valor, buscar(lista, (yyvsp[(7) - (10)].cadena))->info.valor, buscar(lista, (yyvsp[(8) - (10)].cadena))->info.valor)); ;}
     break;
 
   case 13:
 
 /* Line 1455 of yacc.c  */
-#line 71 "sintacticoBison.y"
-    { asignarValorA((yyvsp[(1) - (9)].cadena), calcularEdad(buscar(lista, (yyvsp[(5) - (9)].cadena))->info.valor, buscar(lista, (yyvsp[(7) - (9)].cadena))->info.valor)); ;}
+#line 70 "sintacticoBison.y"
+    { asignarValorA((yyvsp[(2) - (10)].cadena), calcularEdad(buscar(lista, (yyvsp[(6) - (10)].cadena))->info.valor, buscar(lista, (yyvsp[(7) - (10)].cadena))->info.valor)); ;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 72 "sintacticoBison.y"
-    { mostrarEdad(buscar(lista, (yyvsp[(3) - (5)].cadena))->info.valor) ;}
+#line 71 "sintacticoBison.y"
+    { mostrarEdad(buscar(lista, (yyvsp[(3) - (6)].cadena))->info.valor) ;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 76 "sintacticoBison.y"
+#line 75 "sintacticoBison.y"
     {(yyval.number) = (yyvsp[(1) - (1)].number); ;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 77 "sintacticoBison.y"
+#line 76 "sintacticoBison.y"
     { (yyval.number) = (yyvsp[(1) - (3)].number) + (yyvsp[(3) - (3)].number); ;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 78 "sintacticoBison.y"
+#line 77 "sintacticoBison.y"
     { (yyval.number) = (yyvsp[(1) - (3)].number) - (yyvsp[(3) - (3)].number); ;}
     break;
 
   case 18:
 
 /* Line 1455 of yacc.c  */
-#line 81 "sintacticoBison.y"
+#line 80 "sintacticoBison.y"
     { (yyval.number) = (buscar(lista, (yyvsp[(1) - (1)].cadena))->info.valor); ;}
     break;
 
   case 19:
 
 /* Line 1455 of yacc.c  */
-#line 82 "sintacticoBison.y"
+#line 81 "sintacticoBison.y"
     { (yyval.number) = (yyvsp[(1) - (1)].number) ; ;}
     break;
 
   case 20:
 
 /* Line 1455 of yacc.c  */
-#line 83 "sintacticoBison.y"
+#line 82 "sintacticoBison.y"
     { (yyval.number) = (yyvsp[(2) - (3)].number); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1548 "sintacticoBison.tab.c"
+#line 1547 "sintacticoBison.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1756,7 +1755,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 86 "sintacticoBison.y"
+#line 85 "sintacticoBison.y"
 
 
 
@@ -1827,6 +1826,7 @@ void asignarValorA(char* unIdentificador, int unValor) {
     struct Variable aux;
     aux.nombre = strdup(unIdentificador);
     aux.valor = unValor;
+    printf("Regla: ASIGNAR VALOR A\n");
     insertar(lista, aux);
 }
 
@@ -1840,8 +1840,10 @@ void cambiarValorA(char* unIdentificador, int unValor) {
 void insertar(struct Nodo*lista,struct Variable var)
 {
     struct Nodo *n,*p,*ant;
-    n = NULL;
-    n->info = var;
+    n = (struct Nodo*)malloc(sizeof(struct Nodo));
+    n->info.valor = var.valor;
+    n->info.nombre = var.nombre;
+     printf("Regla: insertar\n");
     p = lista;
     while(p!=NULL)
     {
@@ -1853,6 +1855,7 @@ void insertar(struct Nodo*lista,struct Variable var)
         ant->sig=n;
     else
         lista=n;
+    
 }
 
 void reemplazarEn(struct Nodo*lista,char* unIdentificador, int unValor)
