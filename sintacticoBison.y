@@ -3,113 +3,91 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
+#include <stdbool.h>
 
 extern int yylineno;
 
-struct Variable{
-    char* nombre;
-    int valor;
+extern char *yytext;
+extern int yyleng;
+extern int yylex(void);
+extern void yyerror(char*);
+extern int yywrap();
+
+extern void asignarId(char* id, int valor);
+extern void inicializarIdentificadores();
+extern bool estaElIdRegistrado(char* id);
+extern void actualizarId(char*id, int valor);
+extern void reasignarId(char*id, int valor);
+extern int obtenerValor(char* id);
+extern int valorId(char* id);
+extern int calcularFecha(int anio, int mes, int dia);
+extern int calcularEdad(int fechaActual, int fechaNacimiento);
+extern void mostrarEdad (int edad);
+
+
+struct Id {
+	char id[30];
+	int num;
 };
 
-struct Nodo{
-    struct Variable info;
-    struct Nodo*sig;
-};
-
-
-int yylex(); 
-int yyerror(char*);
-int main(int argc, char **argv);
-int calcularEdad(int fechaActual, int fechaNacimiento);
-void mostrarEdad ( int edad);
-int calcularFecha(int anio, int mes, int dia);
-void asignarValorA(char* unIdentificador, int unValor);
-void cambiarValorA(char* unIdentificador, int unValor);
-void insertar(struct Nodo*lista, struct Variable var);
-void reemplazarEn(struct Nodo*lista, char* unIdentificador, int unValor);
-struct Nodo*buscar(struct Nodo*lista, char* unIdentificador);
-void liberarMemoria(struct Nodo* lista);
-
-
-struct Nodo* lista = NULL;
+struct Id listaIds[100];
+int contadorIds = 0;
 
 %}
 
-%error-verbose
 
-%token ASIGNACION PUNTO SUMA RESTA PARENTESISIZQUIERDO PARENTESISDERECHO COMA OTHER ID NUMERO CALCULARFECHA CALCULAREDAD MOSTRAREDAD INICIO FIN ENTERO
+
+%token ASIGNACION PUNTO SUMA RESTA PARENTESISIZQUIERDO PARENTESISDERECHO COMA OTHER CALCULARFECHA CALCULAREDAD MOSTRAREDAD INICIO FIN ENTERO
+%token <cadena> ID  
+%token <num> NUMERO
 
 %union{
-   char cadena[30];
-   int number;
-   char* reservada;
+   char* cadena;
+   int num;
 } 
 
-%type <cadena> ID sentencia sentencias
-%type <number> NUMERO expresion primaria 
-%type <reservada> MOSTRAREDAD CALCULARFECHA CALCULAREDAD INICIO FIN ENTERO ASIGNACION
+%%
 
-%start prog
+programa: INICIO {printf("Inicio de analisis sintactico \n");} sentencias FIN
+;
+
+sentencias : sentencia {printf("Inicio de analisis sintactico sentencia \n");}
+        | sentencias sentencia  
+;
+
+sentencia: ENTERO ID ASIGNACION NUMERO PUNTO { char* id = $<cadena>2; int valor = $<num>4; asignarId(id, valor); printf("Fin de asignacion \n");  }
+        | ID ASIGNACION NUMERO PUNTO { char* id = $<cadena>1; int valor = $<num>3; reasignarId(id, valor); printf("Fin de asignacion \n");  }
+        | ENTERO ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO ID ID ID PARENTESISDERECHO PUNTO { char* id = $<cadena>2; char* id1 = $<cadena>6; char* id2 = $<cadena>7; char* id3 = $<cadena>8; int valor1 = valorId(id1); int valor2 = valorId(id2); int valor3 = valorId(id3); int fecha = calcularFecha(valor1, valor2, valor3); asignarId(id, fecha); printf("Fin de calculo de fecha \n");}
+        | ENTERO ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO ID ID PARENTESISDERECHO PUNTO { char* id = $<cadena>2; char* id1 = $<cadena>6; char* id2 = $<cadena>7; int valor1 = valorId(id1); int valor2 = valorId(id2); int edad = calcularEdad(valor1, valor2); asignarId(id, edad); printf("Fin de calculo de edad \n");}
+        // | ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO ID ID ID PARENTESISDERECHO PUNTO
+        // | ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO ID ID PARENTESISDERECHO PUNTO
+        | MOSTRAREDAD PARENTESISIZQUIERDO ID PARENTESISDERECHO PUNTO {char* id = $<cadena>3; int valor = valorId(id); mostrarEdad(valor); printf("Fin de muestreo de edad \n");}
+;
+
 
 %%
 
-prog: 
-    INICIO { printf("Regla: INICIO\n")} sentencias { printf("Regla: sentencias\n")} FIN { printf("Regla: FIN\n")};
-;
-
-sentencias : sentencias sentencia { printf("Regla:sentencias sentencia\n")}
-        | sentencia {printf("Entro a sentencia\n")}
-;
-
-sentencia: ENTERO ID PUNTO {printf("Regla: ENTERO ID PUNTO\n"); asignarValorA($2, 0);};
-        | ENTERO ID ASIGNACION NUMERO PUNTO {printf("Regla: ENTERO ID ASIGNACION NUMERO PUNTO\n"); asignarValorA($2, $4); }; 
-        | ID ASIGNACION expresion PUNTO { cambiarValorA($1, $3); };
-        | ENTERO ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO NUMERO NUMERO NUMERO PARENTESISDERECHO PUNTO {asignarValorA($2, calcularFecha($6, $7, $8)); }; // SI ME DAN 3 NUMEROS
-        | ENTERO ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO NUMERO NUMERO PARENTESISDERECHO PUNTO {asignarValorA($2, calcularEdad($6, $7)); }; // SI ME DAN 2 NUMEROS
-        | ENTERO ID ASIGNACION CALCULARFECHA PARENTESISIZQUIERDO ID ID ID PARENTESISDERECHO PUNTO {asignarValorA($2, calcularFecha(buscar(lista, $6)->info.valor, buscar(lista, $7)->info.valor, buscar(lista, $8)->info.valor)); }; // SI ME DAN 3 IDENTIFICADORES
-        | ENTERO ID ASIGNACION CALCULAREDAD PARENTESISIZQUIERDO ID ID PUNTO PARENTESISDERECHO PUNTO {asignarValorA($2, calcularEdad(buscar(lista, $6)->info.valor, buscar(lista, $7)->info.valor)); }; // SI ME DAN 2 IDENTIFICADORES
-        | MOSTRAREDAD PARENTESISIZQUIERDO ID PARENTESISDERECHO PUNTO { mostrarEdad(buscar(lista, $3)->info.valor) };
-;
-
-
-expresion: primaria {$$ = $1; }
-        | expresion SUMA primaria { $$ = $1 + $3; }
-        | expresion RESTA primaria { $$ = $1 - $3; }
-; 
-
-primaria: ID { $$ = (buscar(lista, $1)->info.valor); }
-        |NUMERO { $$ = $1 ; }
-        |PARENTESISIZQUIERDO expresion PARENTESISDERECHO { $$ = $2; }
-;
-
-%%
-
-
-
-int yyerror(char *s)
-{
-	printf(" -> Error sintactico en linea %d \n", yylineno);
-	return 0;
-}
-
-int main(int argc, char **argv)
-{
+int main() {
+    inicializarIdentificadores();
     yyparse();
-    liberarMemoria(lista);
-    return 0;
+    return 1;
 }
 
-void liberarMemoria(struct Nodo* lista) {
-    struct Nodo* p = lista;
-    while (p != NULL) {
-        free(p->info.nombre);
-        struct Nodo* temp = p;
-        p = p->sig;
-        free(temp);
-    }
+void yyerror (char *s){
+    printf ("Error de tipo semantico en linea %d \n", yylineno);
+}
+
+int yywrap()
+{
+    return 1;
+}
+
+int calcularFecha(int anio, int mes, int dia) {
+    return anio * 10000 + mes * 100 + dia;
 }
 
 int calcularEdad(int fechaActual, int fechaNacimiento) {
+    
     int dia_a = fechaActual % 100;
     int mes_a = (fechaActual % 10000 - dia_a) / 100;
     int anio_a = fechaActual / 10000;
@@ -122,6 +100,8 @@ int calcularEdad(int fechaActual, int fechaNacimiento) {
     int edad_d = dia_a - dia_n;
     int aux;
     
+    int edad;
+
     if(edad_m <= 0) {
         edad_a--;
         aux = 12 - edad_m;
@@ -133,10 +113,13 @@ int calcularEdad(int fechaActual, int fechaNacimiento) {
         aux = 30 - edad_d;
         edad_d = aux;
     }
-    return edad_a * 10000 + edad_m * 100 + edad_d; 
+    edad = edad_a * 10000 + edad_m * 100 + edad_d;
+    printf("La edad no procesada es de: %d ", edad);
+
+    return edad; 
 }
 
-void mostrarEdad ( int edad){
+void mostrarEdad (int edad) {
     int edad_d = edad % 100;
     int edad_m = (edad % 10000 - edad_d) / 100;
     int edad_a = edad / 10000;
@@ -144,63 +127,81 @@ void mostrarEdad ( int edad){
     printf("Usted tiene %d años, %d meses y %d dias\n", edad_a, edad_m, edad_d);
 }
 
-int calcularFecha(int anio, int mes, int dia){
-    return anio * 10000 + mes * 100 + dia;
-}
 
-void asignarValorA(char* unIdentificador, int unValor) {
-    struct Variable aux;
-    aux.nombre = strdup(unIdentificador);
-    aux.valor = unValor;
-    printf("Regla: ASIGNAR VALOR A\n");
-    insertar(lista, aux);
-}
 
-void cambiarValorA(char* unIdentificador, int unValor) {
-    struct Variable aux;
-    aux.nombre = strdup(unIdentificador);
-    aux.valor = unValor;
-    reemplazarEn(lista, unIdentificador, unValor);
-}
-
-void insertar(struct Nodo*lista,struct Variable var)
-{
-    struct Nodo *n,*p,*ant;
-    n = (struct Nodo*)malloc(sizeof(struct Nodo));
-    n->info.valor = var.valor;
-    n->info.nombre = var.nombre;
-     printf("Regla: insertar\n");
-    p = lista;
-    while(p!=NULL)
-    {
-        ant=p;
-        p=p->sig;
+void inicializarIdentificadores() {
+    printf("inicializacion de memoria para identificadores \n");
+    for(int i = 0; i<100; i++) {
+        listaIds[i].num = 0;
     }
-    n->sig=p;
-    if(p!=lista)
-        ant->sig=n;
-    else
-        lista=n;
-    
 }
 
-void reemplazarEn(struct Nodo*lista,char* unIdentificador, int unValor)
+void asignarId(char* id, int valor)
 {
-    struct Nodo*objetivo=buscar(lista, unIdentificador);
-    if(objetivo == NULL){
-    printf("Esta intentando asignar %d a un identificador : %s que no existe", unValor, unIdentificador);
+	int i = 0;
+    int aux = 0;
+	bool encontrado = false;
+	if(estaElIdRegistrado(id)){
+        actualizarId(id, valor);
+    } else 
+	{
+        printf("inicializacion de identificador: %s, de valor: %d \n", id, valor);
+	    strcpy(listaIds[contadorIds].id, id);
+	    listaIds[contadorIds].num = valor;
+        printf("identificador: %s, asignado a: %d \n", listaIds[i].id, listaIds[i].num);
+	    contadorIds++;
+	}
+}
+
+bool estaElIdRegistrado(char* id) {
+    for(int i = 0; i<contadorIds; i++){
+        if(strcmp(listaIds[i].id, id) == 0){
+            return true;
+        }
+    }
+    printf("Identificador: %s, no encontrado. Comienzo de inicializacion \n", id);
+    return false;
+}
+
+void actualizarId(char*id, int valor) {
+    int i = 0;
+    while(i<contadorIds) {
+        if(strcmp(listaIds[i].id, id) == 0){
+            listaIds[i].num = valor;
+            return;
+        }
+    }
+}
+
+void reasignarId(char*id, int valor) {
+    if(estaElIdRegistrado(id)){
+        actualizarId(id, valor);
+    }else {
+        printf("Error semantico, intenta asignar un id no creado \n");
         exit(0);
-    }  
-    else
-        objetivo->info.valor = unValor;
-        
+    }
 }
 
-struct Nodo*buscar(struct Nodo*lista, char* unIdentificador)
-{
-    struct Nodo*p=lista;
-    while(p!=NULL && p->info.nombre != unIdentificador)
-        p=p->sig;
-    return p;
+int valorId(char* id) {
+    if(estaElIdRegistrado(id)){
+        printf("Identificador: %s encontrado, su valor es: %d \n", id, obtenerValor(id));
+        return obtenerValor(id);
+    }else{
+        printf("Error semantico, esta pidiendo el valor de un id no creado \n");
+        exit(0);
+    }
+}
+
+int obtenerValor(char* id) {
+    int i = 0;
+    char*aux;
+    while(i<contadorIds) {
+        aux = &listaIds[i].id[0];
+        if(strcmp(aux, id) == 0){
+            return listaIds[i].num;
+        }
+        i++;
+    }
+    return 0; //nunca va a llegar aca porque en "valorId" ya verifique que exista
 }
 
