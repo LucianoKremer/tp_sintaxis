@@ -1,12 +1,12 @@
 inicio
-Int anioa Es 2023.
-Int mesa Es 11.
-Int diaa Es 17.
-Int anion Es 2004.
-Int mesn Es 2.
-Int dian Es 10.
-Int fechaa Es CalcularFecha(anioa mesa diaa).
-Int fechan Es CalcularFecha(anion mesn dian).
-Int edad Es CalcularEdad(fechaa fechan).
-MostrarEdad(edad).
+int anio_a es 2023.
+int mes_a es 11.
+int dia_a es 19.
+int anio_n es 2003.
+int mes_n es 6.
+int dia_n es 7.
+int fecha_a es calcularFecha(anio_a mes_a dia_a).
+int fecha_n es calcularFecha(anio_n mes_n dia_n).
+int edad es calcularEdad(fecha_a fecha_n).
+mostrarEdad(edad).
 fin
