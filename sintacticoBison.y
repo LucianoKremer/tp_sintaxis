@@ -124,6 +124,11 @@ void mostrarEdad (int edad) {
     int edad_m = (edad % 10000 - edad_d) / 100;
     int edad_a = edad / 10000;
 
+    if(edad_m >= 12){
+        edad_m -= 12;
+        edad_a++;
+    }
+    
     printf("Usted tiene %d años, %d meses y %d dias\n", edad_a, edad_m, edad_d);
 }
 

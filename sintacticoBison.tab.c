@@ -74,35 +74,35 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <string.h>
+#include <stdbool.h>
 
 extern int yylineno;
 
-struct Variable{
-    char* nombre;
-    int valor;
+extern char *yytext;
+extern int yyleng;
+extern int yylex(void);
+extern void yyerror(char*);
+extern int yywrap();
+
+extern void asignarId(char* id, int valor);
+extern void inicializarIdentificadores();
+extern bool estaElIdRegistrado(char* id);
+extern void actualizarId(char*id, int valor);
+extern void reasignarId(char*id, int valor);
+extern int obtenerValor(char* id);
+extern int valorId(char* id);
+extern int calcularFecha(int anio, int mes, int dia);
+extern int calcularEdad(int fechaActual, int fechaNacimiento);
+extern void mostrarEdad (int edad);
+
+
+struct Id {
+	char id[30];
+	int num;
 };
 
-struct Nodo{
-    struct Variable info;
-    struct Nodo*sig;
-};
-
-
-int yylex(); 
-int yyerror(char*);
-int main(int argc, char **argv);
-int calcularEdad(int fechaActual, int fechaNacimiento);
-void mostrarEdad ( int edad);
-int calcularFecha(int anio, int mes, int dia);
-void asignarValorA(char* unIdentificador, int unValor);
-void cambiarValorA(char* unIdentificador, int unValor);
-void insertar(struct Nodo*lista, struct Variable var);
-void reemplazarEn(struct Nodo*lista, char* unIdentificador, int unValor);
-struct Nodo*buscar(struct Nodo*lista, char* unIdentificador);
-void liberarMemoria(struct Nodo* lista);
-
-
-struct Nodo* lista = NULL;
+struct Id listaIds[100];
+int contadorIds = 0;
 
 
 
@@ -119,7 +119,7 @@ struct Nodo* lista = NULL;
 # undef YYERROR_VERBOSE
 # define YYERROR_VERBOSE 1
 #else
-# define YYERROR_VERBOSE 1
+# define YYERROR_VERBOSE 0
 #endif
 
 /* Enabling the token table.  */
@@ -142,14 +142,14 @@ struct Nodo* lista = NULL;
      PARENTESISDERECHO = 263,
      COMA = 264,
      OTHER = 265,
-     ID = 266,
-     NUMERO = 267,
-     CALCULARFECHA = 268,
-     CALCULAREDAD = 269,
-     MOSTRAREDAD = 270,
-     INICIO = 271,
-     FIN = 272,
-     ENTERO = 273
+     CALCULARFECHA = 266,
+     CALCULAREDAD = 267,
+     MOSTRAREDAD = 268,
+     INICIO = 269,
+     FIN = 270,
+     ENTERO = 271,
+     ID = 272,
+     NUMERO = 273
    };
 #endif
 
@@ -160,16 +160,15 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 42 "sintacticoBison.y"
+#line 44 "sintacticoBison.y"
 
-   char cadena[30];
-   int number;
-   char* reservada;
+   char* cadena;
+   int num;
 
 
 
 /* Line 214 of yacc.c  */
-#line 173 "sintacticoBison.tab.c"
+#line 172 "sintacticoBison.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -181,7 +180,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 185 "sintacticoBison.tab.c"
+#line 184 "sintacticoBison.tab.c"
 
 #ifdef short
 # undef short
@@ -396,16 +395,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   55
+#define YYLAST   33
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  19
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  8
+#define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  20
+#define YYNRULES  10
 /* YYNRULES -- Number of states.  */
-#define YYNSTATES  58
+#define YYNSTATES  36
 
 /* YYTRANSLATE(YYLEX) -- Bison symbol number corresponding to YYLEX.  */
 #define YYUNDEFTOK  2
@@ -452,32 +451,26 @@ static const yytype_uint8 yytranslate[] =
    YYRHS.  */
 static const yytype_uint8 yyprhs[] =
 {
-       0,     0,     3,     4,     5,    11,    14,    16,    20,    26,
-      31,    42,    52,    63,    74,    80,    82,    86,    90,    92,
-      94
+       0,     0,     3,     4,     9,    11,    14,    20,    25,    36,
+      46
 };
 
 /* YYRHS -- A `-1'-separated list of the rules' RHS.  */
 static const yytype_int8 yyrhs[] =
 {
-      20,     0,    -1,    -1,    -1,    16,    21,    23,    22,    17,
-      -1,    23,    24,    -1,    24,    -1,    18,    11,     4,    -1,
-      18,    11,     3,    12,     4,    -1,    11,     3,    25,     4,
-      -1,    18,    11,     3,    13,     7,    12,    12,    12,     8,
-       4,    -1,    18,    11,     3,    14,     7,    12,    12,     8,
-       4,    -1,    18,    11,     3,    13,     7,    11,    11,    11,
-       8,     4,    -1,    18,    11,     3,    14,     7,    11,    11,
-       4,     8,     4,    -1,    15,     7,    11,     8,     4,    -1,
-      26,    -1,    25,     5,    26,    -1,    25,     6,    26,    -1,
-      11,    -1,    12,    -1,     7,    25,     8,    -1
+      20,     0,    -1,    -1,    14,    21,    22,    15,    -1,    23,
+      -1,    22,    23,    -1,    16,    17,     3,    18,     4,    -1,
+      17,     3,    18,     4,    -1,    16,    17,     3,    11,     7,
+      17,    17,    17,     8,     4,    -1,    16,    17,     3,    12,
+       7,    17,    17,     8,     4,    -1,    13,     7,    17,     8,
+       4,    -1
 };
 
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    57,    57,    57,    57,    60,    61,    64,    65,    66,
-      67,    68,    69,    70,    71,    75,    76,    77,    80,    81,
-      82
+       0,    51,    51,    51,    54,    55,    58,    59,    60,    61,
+      64
 };
 #endif
 
@@ -487,10 +480,10 @@ static const yytype_uint8 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "ASIGNACION", "PUNTO", "SUMA", "RESTA",
-  "PARENTESISIZQUIERDO", "PARENTESISDERECHO", "COMA", "OTHER", "ID",
-  "NUMERO", "CALCULARFECHA", "CALCULAREDAD", "MOSTRAREDAD", "INICIO",
-  "FIN", "ENTERO", "$accept", "prog", "$@1", "$@2", "sentencias",
-  "sentencia", "expresion", "primaria", 0
+  "PARENTESISIZQUIERDO", "PARENTESISDERECHO", "COMA", "OTHER",
+  "CALCULARFECHA", "CALCULAREDAD", "MOSTRAREDAD", "INICIO", "FIN",
+  "ENTERO", "ID", "NUMERO", "$accept", "programa", "$@1", "sentencias",
+  "sentencia", 0
 };
 #endif
 
@@ -507,17 +500,15 @@ static const yytype_uint16 yytoknum[] =
 /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
-       0,    19,    21,    22,    20,    23,    23,    24,    24,    24,
-      24,    24,    24,    24,    24,    25,    25,    25,    26,    26,
-      26
+       0,    19,    21,    20,    22,    22,    23,    23,    23,    23,
+      23
 };
 
 /* YYR2[YYN] -- Number of symbols composing right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     0,     0,     5,     2,     1,     3,     5,     4,
-      10,     9,    10,    10,     5,     1,     3,     3,     1,     1,
-       3
+       0,     2,     0,     4,     1,     2,     5,     4,    10,     9,
+       5
 };
 
 /* YYDEFACT[STATE-NAME] -- Default rule to reduce with in state
@@ -525,37 +516,33 @@ static const yytype_uint8 yyr2[] =
    means the default is an error.  */
 static const yytype_uint8 yydefact[] =
 {
-       0,     2,     0,     0,     1,     0,     0,     0,     3,     6,
-       0,     0,     0,     0,     5,     0,    18,    19,     0,    15,
-       0,     0,     7,     4,     0,     9,     0,     0,     0,     0,
-       0,     0,    20,    16,    17,    14,     8,     0,     0,     0,
-       0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,     0,    11,    12,    10,    13
+       0,     2,     0,     0,     1,     0,     0,     0,     0,     4,
+       0,     0,     0,     3,     5,     0,     0,     0,     0,     0,
+       0,     0,     7,    10,     0,     0,     6,     0,     0,     0,
+       0,     0,     0,     0,     9,     8
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     2,     3,    13,     8,     9,    18,    19
+      -1,     2,     3,     8,     9
 };
 
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
-#define YYPACT_NINF -12
+#define YYPACT_NINF -13
 static const yytype_int8 yypact[] =
 {
-      10,   -12,    15,   -11,   -12,     7,    12,    16,   -11,   -12,
-      -6,    17,    -1,    13,   -12,    -6,   -12,   -12,     8,   -12,
-      21,     4,   -12,   -12,     3,   -12,    -6,    -6,    27,    28,
-      26,    29,   -12,   -12,   -12,   -12,   -12,     9,    11,    23,
-      25,    24,    30,    32,    33,    34,    31,    36,    38,    39,
-      37,    44,    45,    46,   -12,   -12,   -12,   -12
+     -12,   -13,     3,    -2,   -13,    -3,    -5,     2,    -7,   -13,
+      -4,    13,    -1,   -13,   -13,    10,   -11,    15,    16,    14,
+      17,    18,   -13,   -13,     6,     8,   -13,     9,    11,    12,
+      19,    22,    27,    28,   -13,   -13
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -12,   -12,   -12,   -12,   -12,    43,    40,    -2
+     -13,   -13,   -13,   -13,    25
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]].  What to do in state STATE-NUM.  If
@@ -565,34 +552,28 @@ static const yytype_int8 yypgoto[] =
 #define YYTABLE_NINF -1
 static const yytype_uint8 yytable[] =
 {
-       5,    15,    21,    22,     6,    16,    17,     7,    26,    27,
-      10,    32,    25,    26,    27,     4,    29,    30,    31,    11,
-      39,    40,    41,    42,    33,    34,     1,    12,    20,    28,
-      23,    35,    36,    37,    43,    45,    38,    44,    49,    50,
-       0,    54,    46,    47,    51,    48,    52,    53,    55,    56,
-      57,    14,     0,     0,     0,    24
+      19,    20,     1,     4,    10,    12,     5,    21,    13,     6,
+       7,     5,    11,    15,     6,     7,    16,    17,    18,    22,
+      23,    24,    26,    27,    25,    28,    29,    32,    30,    31,
+      33,    34,    35,    14
 };
 
-static const yytype_int8 yycheck[] =
+static const yytype_uint8 yycheck[] =
 {
-      11,     7,     3,     4,    15,    11,    12,    18,     5,     6,
-       3,     8,     4,     5,     6,     0,    12,    13,    14,     7,
-      11,    12,    11,    12,    26,    27,    16,    11,    11,     8,
-      17,     4,     4,     7,    11,    11,     7,    12,     4,     8,
-      -1,     4,    12,    11,     8,    12,     8,     8,     4,     4,
-       4,     8,    -1,    -1,    -1,    15
+      11,    12,    14,     0,     7,     3,    13,    18,    15,    16,
+      17,    13,    17,    17,    16,    17,     3,    18,     8,     4,
+       4,     7,     4,    17,     7,    17,    17,     8,    17,    17,
+       8,     4,     4,     8
 };
 
 /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
    symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    16,    20,    21,     0,    11,    15,    18,    23,    24,
-       3,     7,    11,    22,    24,     7,    11,    12,    25,    26,
-      11,     3,     4,    17,    25,     4,     5,     6,     8,    12,
-      13,    14,     8,    26,    26,     4,     4,     7,     7,    11,
-      12,    11,    12,    11,    12,    11,    12,    11,    12,     4,
-       8,     8,     8,     8,     4,     4,     4,     4
+       0,    14,    20,    21,     0,    13,    16,    17,    22,    23,
+       7,    17,     3,    15,    23,    17,     3,    18,     8,    11,
+      12,    18,     4,     4,     7,     7,     4,    17,    17,    17,
+      17,    17,     8,     8,     4,     4
 };
 
 #define yyerrok		(yyerrstatus = 0)
@@ -1406,140 +1387,56 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 57 "sintacticoBison.y"
-    { printf("Regla: INICIO\n");}
-    break;
-
-  case 3:
-
-/* Line 1455 of yacc.c  */
-#line 57 "sintacticoBison.y"
-    { printf("Regla: sentencias\n");}
+#line 51 "sintacticoBison.y"
+    {printf("Inicio de analisis sintactico \n");;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 57 "sintacticoBison.y"
-    { printf("Regla: FIN\n");}
-    break;
-
-  case 5:
-
-/* Line 1455 of yacc.c  */
-#line 60 "sintacticoBison.y"
-    { printf("Regla:sentencias sentencia\n");}
+#line 54 "sintacticoBison.y"
+    {printf("Inicio de analisis sintactico sentencia \n");;}
     break;
 
   case 6:
 
 /* Line 1455 of yacc.c  */
-#line 61 "sintacticoBison.y"
-    {printf("Entro a sentencia\n");}
+#line 58 "sintacticoBison.y"
+    { char* id = (yyvsp[(2) - (5)].cadena); int valor = (yyvsp[(4) - (5)].num); asignarId(id, valor); printf("Fin de asignacion \n");  ;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 64 "sintacticoBison.y"
-    {printf("Regla: ENTERO ID PUNTO\n"); asignarValorA((yyvsp[(2) - (3)].cadena), 0);;}
+#line 59 "sintacticoBison.y"
+    { char* id = (yyvsp[(1) - (4)].cadena); int valor = (yyvsp[(3) - (4)].num); reasignarId(id, valor); printf("Fin de asignacion \n");  ;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 65 "sintacticoBison.y"
-    {printf("Regla: ENTERO ID ASIGNACION NUMERO PUNTO\n"); asignarValorA((yyvsp[(2) - (5)].cadena), (yyvsp[(4) - (5)].number)); ;}
+#line 60 "sintacticoBison.y"
+    { char* id = (yyvsp[(2) - (10)].cadena); char* id1 = (yyvsp[(6) - (10)].cadena); char* id2 = (yyvsp[(7) - (10)].cadena); char* id3 = (yyvsp[(8) - (10)].cadena); int valor1 = valorId(id1); int valor2 = valorId(id2); int valor3 = valorId(id3); int fecha = calcularFecha(valor1, valor2, valor3); asignarId(id, fecha); printf("Fin de calculo de fecha \n");;}
     break;
 
   case 9:
 
 /* Line 1455 of yacc.c  */
-#line 66 "sintacticoBison.y"
-    { cambiarValorA((yyvsp[(1) - (4)].cadena), (yyvsp[(3) - (4)].number)); ;}
+#line 61 "sintacticoBison.y"
+    { char* id = (yyvsp[(2) - (9)].cadena); char* id1 = (yyvsp[(6) - (9)].cadena); char* id2 = (yyvsp[(7) - (9)].cadena); int valor1 = valorId(id1); int valor2 = valorId(id2); int edad = calcularEdad(valor1, valor2); asignarId(id, edad); printf("Fin de calculo de edad \n");;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 67 "sintacticoBison.y"
-    {asignarValorA((yyvsp[(2) - (10)].cadena), calcularFecha((yyvsp[(6) - (10)].number), (yyvsp[(7) - (10)].number), (yyvsp[(8) - (10)].number))); ;}
-    break;
-
-  case 11:
-
-/* Line 1455 of yacc.c  */
-#line 68 "sintacticoBison.y"
-    {asignarValorA((yyvsp[(2) - (9)].cadena), calcularEdad((yyvsp[(6) - (9)].number), (yyvsp[(7) - (9)].number))); ;}
-    break;
-
-  case 12:
-
-/* Line 1455 of yacc.c  */
-#line 69 "sintacticoBison.y"
-    {asignarValorA((yyvsp[(2) - (10)].cadena), calcularFecha(buscar(lista, (yyvsp[(6) - (10)].cadena))->info.valor, buscar(lista, (yyvsp[(7) - (10)].cadena))->info.valor, buscar(lista, (yyvsp[(8) - (10)].cadena))->info.valor)); ;}
-    break;
-
-  case 13:
-
-/* Line 1455 of yacc.c  */
-#line 70 "sintacticoBison.y"
-    {asignarValorA((yyvsp[(2) - (10)].cadena), calcularEdad(buscar(lista, (yyvsp[(6) - (10)].cadena))->info.valor, buscar(lista, (yyvsp[(7) - (10)].cadena))->info.valor)); ;}
-    break;
-
-  case 14:
-
-/* Line 1455 of yacc.c  */
-#line 71 "sintacticoBison.y"
-    { mostrarEdad(buscar(lista, (yyvsp[(3) - (5)].cadena))->info.valor) ;}
-    break;
-
-  case 15:
-
-/* Line 1455 of yacc.c  */
-#line 75 "sintacticoBison.y"
-    {(yyval.number) = (yyvsp[(1) - (1)].number); ;}
-    break;
-
-  case 16:
-
-/* Line 1455 of yacc.c  */
-#line 76 "sintacticoBison.y"
-    { (yyval.number) = (yyvsp[(1) - (3)].number) + (yyvsp[(3) - (3)].number); ;}
-    break;
-
-  case 17:
-
-/* Line 1455 of yacc.c  */
-#line 77 "sintacticoBison.y"
-    { (yyval.number) = (yyvsp[(1) - (3)].number) - (yyvsp[(3) - (3)].number); ;}
-    break;
-
-  case 18:
-
-/* Line 1455 of yacc.c  */
-#line 80 "sintacticoBison.y"
-    { (yyval.number) = (buscar(lista, (yyvsp[(1) - (1)].cadena))->info.valor); ;}
-    break;
-
-  case 19:
-
-/* Line 1455 of yacc.c  */
-#line 81 "sintacticoBison.y"
-    { (yyval.number) = (yyvsp[(1) - (1)].number) ; ;}
-    break;
-
-  case 20:
-
-/* Line 1455 of yacc.c  */
-#line 82 "sintacticoBison.y"
-    { (yyval.number) = (yyvsp[(2) - (3)].number); ;}
+#line 64 "sintacticoBison.y"
+    {char* id = (yyvsp[(3) - (5)].cadena); int valor = valorId(id); mostrarEdad(valor); printf("Fin de muestreo de edad \n");;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1543 "sintacticoBison.tab.c"
+#line 1440 "sintacticoBison.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1751,35 +1648,30 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 85 "sintacticoBison.y"
+#line 68 "sintacticoBison.y"
 
 
-
-
-int yyerror(char *s)
-{
-	printf(" -> Error sintactico en linea %d \n", yylineno);
-	return 0;
-}
-
-int main(int argc, char **argv)
-{
+int main() {
+    inicializarIdentificadores();
     yyparse();
-    liberarMemoria(lista);
-    return 0;
+    return 1;
 }
 
-void liberarMemoria(struct Nodo* lista) {
-    struct Nodo* p = lista;
-    while (p != NULL) {
-        free(p->info.nombre);
-        struct Nodo* temp = p;
-        p = p->sig;
-        free(temp);
-    }
+void yyerror (char *s){
+    printf ("Error de tipo semantico en linea %d \n", yylineno);
+}
+
+int yywrap()
+{
+    return 1;
+}
+
+int calcularFecha(int anio, int mes, int dia) {
+    return anio * 10000 + mes * 100 + dia;
 }
 
 int calcularEdad(int fechaActual, int fechaNacimiento) {
+    
     int dia_a = fechaActual % 100;
     int mes_a = (fechaActual % 10000 - dia_a) / 100;
     int anio_a = fechaActual / 10000;
@@ -1792,6 +1684,8 @@ int calcularEdad(int fechaActual, int fechaNacimiento) {
     int edad_d = dia_a - dia_n;
     int aux;
     
+    int edad;
+
     if(edad_m <= 0) {
         edad_a--;
         aux = 12 - edad_m;
@@ -1803,75 +1697,101 @@ int calcularEdad(int fechaActual, int fechaNacimiento) {
         aux = 30 - edad_d;
         edad_d = aux;
     }
-    return edad_a * 10000 + edad_m * 100 + edad_d; 
+    edad = edad_a * 10000 + edad_m * 100 + edad_d;
+    printf("La edad no procesada es de: %d ", edad);
+
+    return edad; 
 }
 
-void mostrarEdad ( int edad){
+void mostrarEdad (int edad) {
     int edad_d = edad % 100;
     int edad_m = (edad % 10000 - edad_d) / 100;
     int edad_a = edad / 10000;
 
+    if(edad_m >= 12){
+        edad_m -= 12;
+        edad_a++;
+    }
+    
     printf("Usted tiene %d años, %d meses y %d dias\n", edad_a, edad_m, edad_d);
 }
 
-int calcularFecha(int anio, int mes, int dia){
-    return anio * 10000 + mes * 100 + dia;
-}
 
-void asignarValorA(char* unIdentificador, int unValor) {
-    struct Variable aux;
-    aux.nombre = strdup(unIdentificador);
-    aux.valor = unValor;
-    printf("Regla: ASIGNAR VALOR A\n");
-    insertar(lista, aux);
-}
 
-void cambiarValorA(char* unIdentificador, int unValor) {
-    struct Variable aux;
-    aux.nombre = strdup(unIdentificador);
-    aux.valor = unValor;
-    reemplazarEn(lista, unIdentificador, unValor);
-}
-
-void insertar(struct Nodo*lista,struct Variable var)
-{
-    struct Nodo *n,*p,*ant;
-    n = (struct Nodo*)malloc(sizeof(struct Nodo));
-    n->info.valor = var.valor;
-    n->info.nombre = var.nombre;
-     printf("Regla: insertar\n");
-    p = lista;
-    while(p!=NULL)
-    {
-        ant=p;
-        p=p->sig;
+void inicializarIdentificadores() {
+    printf("inicializacion de memoria para identificadores \n");
+    for(int i = 0; i<100; i++) {
+        listaIds[i].num = 0;
     }
-    n->sig=p;
-    if(p!=lista)
-        ant->sig=n;
-    else
-        lista=n;
-    
 }
 
-void reemplazarEn(struct Nodo*lista,char* unIdentificador, int unValor)
+void asignarId(char* id, int valor)
 {
-    struct Nodo*objetivo=buscar(lista, unIdentificador);
-    if(objetivo == NULL){
-    printf("Esta intentando asignar %d a un identificador : %s que no existe", unValor, unIdentificador);
+	int i = 0;
+    int aux = 0;
+	bool encontrado = false;
+	if(estaElIdRegistrado(id)){
+        actualizarId(id, valor);
+    } else 
+	{
+        printf("inicializacion de identificador: %s, de valor: %d \n", id, valor);
+	    strcpy(listaIds[contadorIds].id, id);
+	    listaIds[contadorIds].num = valor;
+        printf("identificador: %s, asignado a: %d \n", listaIds[i].id, listaIds[i].num);
+	    contadorIds++;
+	}
+}
+
+bool estaElIdRegistrado(char* id) {
+    for(int i = 0; i<contadorIds; i++){
+        if(strcmp(listaIds[i].id, id) == 0){
+            return true;
+        }
+    }
+    printf("Identificador: %s, no encontrado. Comienzo de inicializacion \n", id);
+    return false;
+}
+
+void actualizarId(char*id, int valor) {
+    int i = 0;
+    while(i<contadorIds) {
+        if(strcmp(listaIds[i].id, id) == 0){
+            listaIds[i].num = valor;
+            return;
+        }
+    }
+}
+
+void reasignarId(char*id, int valor) {
+    if(estaElIdRegistrado(id)){
+        actualizarId(id, valor);
+    }else {
+        printf("Error semantico, intenta asignar un id no creado \n");
         exit(0);
-    }  
-    else
-        objetivo->info.valor = unValor;
-        
+    }
 }
 
-struct Nodo*buscar(struct Nodo*lista, char* unIdentificador)
-{
-    struct Nodo*p=lista;
-    while(p!=NULL && p->info.nombre != unIdentificador)
-        p=p->sig;
-    return p;
+int valorId(char* id) {
+    if(estaElIdRegistrado(id)){
+        printf("Identificador: %s encontrado, su valor es: %d \n", id, obtenerValor(id));
+        return obtenerValor(id);
+    }else{
+        printf("Error semantico, esta pidiendo el valor de un id no creado \n");
+        exit(0);
+    }
+}
+
+int obtenerValor(char* id) {
+    int i = 0;
+    char*aux;
+    while(i<contadorIds) {
+        aux = &listaIds[i].id[0];
+        if(strcmp(aux, id) == 0){
+            return listaIds[i].num;
+        }
+        i++;
+    }
+    return 0; //nunca va a llegar aca porque en "valorId" ya verifique que exista
 }
 
 

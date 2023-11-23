@@ -47,14 +47,14 @@
      PARENTESISDERECHO = 263,
      COMA = 264,
      OTHER = 265,
-     ID = 266,
-     NUMERO = 267,
-     CALCULARFECHA = 268,
-     CALCULAREDAD = 269,
-     MOSTRAREDAD = 270,
-     INICIO = 271,
-     FIN = 272,
-     ENTERO = 273
+     CALCULARFECHA = 266,
+     CALCULAREDAD = 267,
+     MOSTRAREDAD = 268,
+     INICIO = 269,
+     FIN = 270,
+     ENTERO = 271,
+     ID = 272,
+     NUMERO = 273
    };
 #endif
 
@@ -65,16 +65,15 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 42 "sintacticoBison.y"
+#line 44 "sintacticoBison.y"
 
-   char cadena[30];
-   int number;
-   char* reservada;
+   char* cadena;
+   int num;
 
 
 
 /* Line 1676 of yacc.c  */
-#line 78 "sintacticoBison.tab.h"
+#line 77 "sintacticoBison.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
